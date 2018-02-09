@@ -1,18 +1,8 @@
 from flask import Flask
 from flask import request
 from flask import make_response
-import argparse
 import pandas as pd
 import json
-
-parser = argparse.ArgumentParser()
-parser.add_argument("f_path", help="File_Path Or File_Name")
-args = parser.parse_args()
-File_Path = args.f_path
-df = pd.read_excel(File_Path)
-ddf = df[df['Technology'] == 'BIDW']['Customer ID']
-hd = df.head()
-sdf = hd.to_html()
 
 app = Flask(__name__)
 
@@ -55,26 +45,6 @@ def makeWebhookResult(req):
         #"contextOut": [],
         "source": "TeaMBot"
     }
-
-
-@app.route('/', methods=['GET'])
-def test():
-    return sdf
-
-
-@app.route('/<string:name>', methods=['GET'])
-def test0(name):
-    tech = df[[name, 'Project Name', 'Project ID']]
-    tt = tech.to_html()
-    return tt
-
-
-@app.route('/<string:name>/<string:name1>', methods=['GET'])
-def test10(name, name1):
-    tech = df.loc[df[name] == name1, [name, 'Project ID', 'Project Name']]
-    tt = tech.to_html()
-    return tt
-
 
 if __name__ == '__main__':
   app.run()
